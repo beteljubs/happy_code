@@ -1,2 +1,2 @@
 # happy_code
-Códigos desenvolvidos da Happy Code pelos profs de Maker Avançado.
+Códigos da Happy Code desenvolvidos e/ou corrigidos pelos profs de Maker Avançado.
