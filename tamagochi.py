@@ -3,22 +3,24 @@ import random  # uso de numeros escolhidos aleatoriamente
 
 interval = 5000  # tempo de espera até o tamagochi fazer algo
 
-# variáveis de imagens
+# variáveis de imagens:
 
+# imagens olhando para os lados
 right = Image(
-    "90900:"
     "00000:"
+    "90900:"
     "00000:"
     "90009:"
     "09990")
 
 left = Image(
-    "00909:"
     "00000:"
+    "00909:"
     "00000:"
     "90009:"
     "09990")
 
+# imagens comendo
 abre_boca = Image(
     "09090:"
     "00000:"
@@ -33,6 +35,7 @@ fecha_boca = Image(
     "09990:"
     "00000")
 
+# é usada?
 sono = Image(
     "99099:"
     "00000:"
@@ -40,144 +43,142 @@ sono = Image(
     "09990:"
     "00000")
 
-'''
-CRIAÇÃO DE CLASSE!!!!!!!! COISA NOVA
- o que é? grupo de métodos (funções) ou atributos (variáveis) em comum
- def __init__ ?
- self?
-'''
-
-class Jogo():  # declarando a classe de nome Jogo
-    def __init__(self):  # self vai representar objetos da mesma classe
-        self.last = None  # comparar o vetor do movimento do bichinho
+# declaração da classe do joguinho q criaremos
+class Jogo():
+    def __init__(self):  # self (?)
+        self.last = None  # comparar o vetor do movimento do bichinho (?)
         self.x_pos = 0  # x inicial do bichinho
         self.y_pos = 0  # y inicial do bichinho
         display.scroll("Pegue a bola")  # aparece quando A + B for pressionado
         self.draw()  # chamando função draw que vamos logo definir
 
-'''
-set_pixel(x, y, valor): escolhe a posição de um pixel
-    x: pos em x
-    y: pos em y
-    valor: intensidade do brilho do pixel
-'''
-
+    # define a imagem que aparece no display durante o jogo
     def draw(self):
-        imagem_bola = Image(  # imagem inicial: a bola c brilho 5 no meio do display
+        # bola c brilho 5 no meio do display
+        imagem_bola = Image(
             "00000:"
             "00000:"
             "00500:"
             "00000:"
             "00000")
-        imagem_bola.set_pixel(self.x_pos, self.y_pos, 9)  # add na imagem posição inicial do bichinho ????
-        display.show(imagem)  # mostra a imagem inicial do jogo
 
-'''
-para sair de um loop podemos usar o comando 'break'
-revisar while True
-revisar estruturas condicionais
-'''
+        # add na imagem posição inicial do bichinho:
+        imagem_bola.set_pixel(self.x_pos, self.y_pos, 9)
+        display.show(imagem_bola)  # mostra a imagem inicial do jogo
 
-    def start(self):  # função do inicio do jogo - roda em loop
+    # função do inicio do jogo - roda em loop
+    def start(self):
         while True:  # loop
             # funções de controle que declararemos em seguida:
             self.check_win()  # controla se o bichinho pegou a bola
             self.check_dir()  # controla a posição do bichinho
-            if button_a.is_pressed():  # se o botão for pressionado...
-                break   # ...sairemos do loop
+
+            # se apertamos em algum botão, sai do jogo:
+            if button_a.is_pressed():
+                break
             if button_b.is_pressed():
                 break
 
-'''
-uso da bib random: random.randrange(num): gera numero aleatório no intervalo (range) definido por num
-para randrange(5) vai ser um numero aleatorio entre 0 e 4
-'''
-
-# função para definir lugares aleatorios para o bichinho surgir
+    # função que irá aleatorizar uma nova posição para o bichinho
     def novo_lugar(self):
         self.x_pos = random.randrange(5)  # novo valor para a posição em x
-        self.y_pos = random.randrange(5)
+        self.y_pos = random.randrange(5)  # novo valor para a posição em y
+
         # checar se a posição nao é a mesma que a da bola (2,2)
         if self.x_pos == 2 and self.y_pos == 2:
-            self.x_pos = 4  '''PODEMOS COLOCAR PARA ALEATORIZAR ENQUANTO FOR (2,2)'''
+            # se for a mesma, ir para (4,4)
+            self.x_pos = 4
+            '''PODEMOS COLOCAR PARA ALEATORIZAR ENQUANTO FOR (2,2)'''
             self.y_pos = 4
 
-    # checar se o bichinho pegou a bola (posição da bola = posição do bichinho)
+    # checar se o bichinho pegou a bola (bola e bichinho na mesma pos)
     def check_win(self):
         if self.x_pos == 2 and self.y_pos == 2:
             display.show(Image.HEART)
             sleep(2000)
+            # chama funções para reiniciar o joguinho:
             self.novo_lugar()
             self.draw()
 
-'''
-comando return: sai da função? - condição segundo as trilhas
-comparação com o break, que sai de um loop
-'''
-
     # função para cuidar a posição do bichinho
     def check_dir(self):
-        inc = acceleromoter.current_gesture()  # valor lido pelo acelerometro (indica a inclinação do micro:bit)
-            if inc == self.last:  '''Q Q É ESSE LAST'''
-                return
+        inc = accelerometer.current_gesture()  # inclinação do m:b
 
-            if inc == "up":  # se o micro:bit estiver inclinado para cima...
-                if self.y_pos < 4:  # ... e y < 4
-                    self.y_pos += 1  # atualiza o valor da posição em y (ele desce)
-            elif inc == "down":  # se estiver inclinado para baixo...
-                if self.y_pos > 0:  # e a posição y for maior que 0 (ele nao esta na primeira linha)
-                    self.y_pos -= 1  # ele sobe
-            elif inc == "left":
-                if self.x_pos > 0:  # se n estiver na primeira coluna
-                    self.x_pos -= 1  # vai para a esquerda
-            elif inc == "right":
-                if self.x_pos < 4:  # se nao estiver na ultima coluna
-                    self.x_pos += 1  # vai p direita
-            else:  # para evitar erros na detecção de outros movimentos:
-                return
-            self.last = inc  '''explicação?'''
-            self.draw()  # chama a função da imagem inicial do jogo
+        if inc == self.last: (?)
+            return
 
-'''
-revisar variavel booleana
-'''
+        # se o m:b estiver inclinado para cima:
+        if inc == "up":
+            # se ele não estiver na última linha:
+            if self.y_pos < 4:
+                self.y_pos += 1  # ele desce
 
-class Pet(objeto):
+        # se o m:b estiver inclinado para baixo:
+        elif inc == "down":
+            # se ele não estiver na primeira linha:
+            if self.y_pos > 0:
+                self.y_pos -= 1  # ele sobe
+
+        # se o m:b estiver inclinado para a esquerda:
+        elif inc == "left":
+            # se ele não estiver na primeira coluna:
+            if self.x_pos > 0:
+                self.x_pos -= 1  # vai para a esquerda
+
+        # se o m:b estiver inclinado para a direita:
+        elif inc == "right":
+            # se ele não estiver na última coluna:
+            if self.x_pos < 4:
+                self.x_pos += 1  # vai p direita
+
+        # para evitar erros na detecção de outros movimentos:
+        else:
+            return
+
+        self.last = inc  # o que isso ta fazendo?
+
+        self.draw()  # mantém a imagem aparecendo (?)
+
+class Pet(object):
     def __init__(self):
-        self.tempo = 0  # controlar o tempo pecorrido
+        self.tempo = 0  # controla o tempo de vida do tamagochi
         self.feliz()  # criaremos a função abaixo
-        self.acao = False  # momentos que o movimento do micro:bit n deve ser considerado
-        self.glic = 6.5  # atribui valor inicial de glicemia no sangue
+        self.acao = False # se False nao consideramos a movimentação do m:b
+        e = 10  # valor inicial de glicemia no sangue
 
-    # função feliz:
+    # funções de possíveis emoções do bichinho
+
     def feliz(self):
         display.show(Image.HAPPY)
         self.acao = False  # movimento do m:b não levado em consideração
 
     def triste(self):
         display.show(Image.ANGRY)
-        self.acao = False
+        self.acao = False  # movimento do m:b não levado em consideração
 
     def dormindo(self):
-        display.show(Image.SLEEP)
-        self.acao = False
+        display.show(Image.ASLEEP)
+        self.acao = False  # movimento do m:b não levado em consideração
 
-    def surpreso(self):  # o nivel de glicemia cai
+    def surpreso(self):
         display.show(Image.SURPRISED)
         self.acao = True  # o movimento do m:b é levado em consideração
-        if self.glic > 4:  # checar o nivel de glicemia
+
+        # se tiver mais que um mínimo de glicemia:
+        if self.glic > 4:
             self.glic -= 0.1  # glicemia cai
 
-# função que fara a glicemia cair com o tempo
+    # função que fará a glicemia cair com o tempo
     def glicemia(self):
+        # a cada 2s cai 0.1 de glicemia
         if self.glic > 0:
             self.glic -= 0.1
-        self.carinha()  # ja programaremos
+        self.carinha()  # definirá que carinho o bichinho fará
 
-# função que determina a carinha do bichinho de acordo com o nivel de glicemia
+    # função que determina a carinha do bichinho pelo nivel de glicemia
     def carinha(self):
         if self.glic < 4:  # glicemia baixa demais
-            self.sad()
+            self.triste()
         if self.glic > 8:  # glicemia alta demais
             self.dormindo()
         else:  # glicemia normal
@@ -185,77 +186,89 @@ class Pet(objeto):
 
     # funcao para checar os movimentos do microbit
     def check_mov(self):
-        inc = accelerometer.current_gesture()
-        if inc == "shake":  # se o m:b estiver sendo agitado
+        inc = accelerometer.current_gesture()  # inclinação do m:b
+
+        # se o m:b for sacudido:
+        if inc == "shake":
             self.surpreso()
             sleep(1000)
+
+        # se o m:b for virado para baixo:
         elif inc == "face down":
             display.show(Image.CONFUSED)
             self.acao = True
+
+        # se o m:b for inclinado para a esquerda:
         elif inc == "left":
             display.show(left)
             self.acao = True
+
+        # se o m:b for inclinado para a direita:
         elif inc == "right":
             display.show(right)
             self.acao = True
+
+        # caso o m:b não esteja se movendo, carinha de acordo com a glicemia
         else:
             if self.acao:
                 self.carinha()
 
-'''
-display.show([img1, img2, img3, img4], num):
-    mostra as imagens da lista com num = delay entre cada imagem (em ms)
-
-display.scroll("{0:0.xf}, {1:0.xf}".format(var1, var2))
-    vai mostrar uma mensagem com as duas variaveis
-    - o primeiro numero (0 e 1) dentro das {} indica qual variavel (na ordem de dentro do format)
-    - e o :0.xf indica que é uma var tipo float (numero real) e queremos x casas decimais
-'''
-
-    # funcao que checa os botões
+    # definições do que acontece ao apertar os botões:
     def check_botao(self):
+        # se os dois botões forem apertados, ele começa o jogo:
         if button_a.is_pressed() and button_b.is_pressed():
             self.jogar()  # definiremos depois
+
+        # se o botão A for apertado, ele come e aumenta a glicemia:
         elif button_a.is_pressed():
             self.glic += 1
-            display.show([boca_aberta, boca_fechada, boca_aberta, boca_fechada], 300)
+            display.show([abre_boca, fecha_boca,
+                         abre_boca, fecha_boca], 300)
             self.carinha()
-        elif button_b.is_pressed():
-            display.scroll("{0:0.1f}".format(self.glic))  # mostrar o nivel de glicemia
 
+        # se o botão B for apertado, aparece o nível de glicemia:
+        elif button_b.is_pressed():
+            display.scroll("{0:0.1f}".format(self.glic))
+
+    # função que checará a morte do bichinho, de acordo com o nivel de glicemia:
     def check_morte(self):
+        # se a qtd de glicemia for muito baixa:
         if self.glic < 1:
             display.show(Image.SKULL)
-            return True '''???''' # faz seguir no loop até q o m:b seja resetado
-        elif self.glic > 30:
+            return True  # faz seguir no loop até q o m:b seja resetado (como?)
+
+        # se a qtd de glicemia for muito alta
+        elif self.glic > 25:
             display.show(Image.GHOST)
-            return True
+            return True  # faz seguir no loop até q o m:b seja resetado (como?)
+
         return False  # bichinho vivo e código ainda rodando
 
-# chamará outras funções enquanto nada acontece
+    # chamará outras funções enquanto nada acontece:
     def espera(self):
-        while True:
+        while True:  # loop
             if self.check_morte():
-                break
+                break  # sai do loop, para de chamar as funções pq ta morto
+
             self.check_mov()
             self.check_botao()
-            atual = running_time()  # tempo corrido
-            delta = atual - self.last_time
-            if delta > INTERVAL: '''interval???'''
-                self.last_time = atual
-                self.glicemia()
+
+            controle do tempo:
+            atual = running_time()  # tempo corrido do código
+            delta = atual - self.tempo  # inicialmente delta = atual
+
+             # se já passou 5 segundos desde a ultima vez q entrou nesse if
+            if delta > interval:
+                self.tempo = atual  # tempo = tempo corrido do código
+                self.glicemia()  # começa a considerar o
+                 valor de glicemia
 
     # função para ir para o jogo
     def jogar(self):
-        jogo = Jogo()  # funcao do jogo atribuida a uma variável
-        game.start()  # começa o jogo (função start)
+        jogo = Jogo()  # funcao do jogo atribuida a uma variável (pq?)
+        jogo.start()  # começa o jogo (função start)
 
-
-'''
-DAFUCKKKKKK??????
-\/ \/ \/ \/ \/
-'''
-
-if __name__ -- '__main__':
-    pet = Pet()
+# o que isso faz?
+if __name__ == '__main__':
+    pet = Pet()  # (pq?)
     pet.espera()
