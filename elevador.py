@@ -4,10 +4,9 @@ import music
 # variável responsável por descer e subir o elevador
 up = False
 
-'''
-revisar funções
-seguranca(): função para controlar a segurança do elevador; não fecha se tiver gente na porta
-'''
+# revisar funções
+# seguranca(): função para controlar a segurança do elevador; não fecha se 
+# tiver gente na porta
 
 # se for ativada, desliga os motores
 def seguranca():
@@ -28,7 +27,7 @@ obs: cor1 = cor do botão escolhido para o pino 1
 while True:
     button_cor1 = pin1.read_digital()
     # sensor que detectará algum passageiro
-    sensor = pin2.read_analog()  '''colocar alguma explicação sobre isso'''
+    sensor = pin2.read_analog()  # colocar alguma explicação sobre isso
 
     # se o botão for pressionado, checaremos se há alguem na porta
     if button_cor1 is (1) and up is True:
@@ -53,7 +52,8 @@ while True:
 
     elif button_cor1 is (1) and up is False:
         if sensor > 300:
-            # agora será ao contrário o pino que ta ligado, pois trocamos o sentido do motor
+            # agora será ao contrário o pino que ta ligado, pois trocamos o 
+            # sentido do motor
             pin12.write_digital(0)
             pin16.write_digital(1)
             sleep(9000)
@@ -65,4 +65,3 @@ while True:
             up = True  # indica que está no térreo
         else:
             seguranca()
-            
