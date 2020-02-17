@@ -5,7 +5,7 @@ import music
 up = False
 
 # revisar funções
-# seguranca(): função para controlar a segurança do elevador; não fecha se 
+# seguranca(): função para controlar a segurança do elevador; não fecha se
 # tiver gente na porta
 
 # se for ativada, desliga os motores
@@ -16,13 +16,11 @@ def seguranca():
     # som para avisar que foi detectado alguem na porta
     music.play(music.FUNERAL)
 
-'''
-para um botão: var = pin.read_digital()
-a var receberá ou 1 ou 0 (unicos posíveis no read_digital)
-    1: botão sendo pressionado
-    0: botão não pressionado
-obs: cor1 = cor do botão escolhido para o pino 1
-'''
+# para um botão: var = pin.read_digital()
+# a var receberá ou 1 ou 0 (unicos posíveis no read_digital)
+#   1: botão sendo pressionado
+#   0: botão não pressionado
+# obs: cor1 = cor do botão escolhido para o pino 1
 
 while True:
     button_cor1 = pin1.read_digital()
@@ -52,7 +50,7 @@ while True:
 
     elif button_cor1 is (1) and up is False:
         if sensor > 300:
-            # agora será ao contrário o pino que ta ligado, pois trocamos o 
+            # agora será ao contrário o pino que ta ligado, pois trocamos o
             # sentido do motor
             pin12.write_digital(0)
             pin16.write_digital(1)
